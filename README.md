@@ -1,6 +1,6 @@
-# Eloquent cache
+# Laravel DB Cache
 
-Laravel Eloqeunt model auto caching.
+Laravel database cache.
 
 ### Contents
 
@@ -23,60 +23,15 @@ Laravel | 5.5
 ### Composer
 
 ```bash
-composer require tarkhov/eloquent-cache
+composer require tarkhov/laravel-db-cache
 ```
 
 ## Usage
 
-### Inherit model
-
-Start using caching features by inheriting `CacheModel` class.
-
-```php
-<?php
-namespace App;
-
-use EloquentCache\Database\Eloquent\CacheModel;
-
-class Post extends CacheModel
-{
-    protected $fillable = [
-        'category_id',
-        'title',
-        'description',
-    ];
-
-    public function category()
-    {
-        return $this->belongsTo('App\Category', 'category_id');
-    }
-}
-```
-
-```php
-<?php
-namespace App;
-
-use EloquentCache\Database\Eloquent\CacheModel;
-
-class Category extends CacheModel
-{
-    protected $cacheTags = ['category'];
-    protected $fillable = [
-        'title',
-        'description',
-    ];
-}
-```
-
 ## Author
 
-**Alexander Tarkhov**
-
-* [Facebook](https://www.facebook.com/alex.tarkhov)
-* [Twitter](https://twitter.com/alextarkhov)
+* [Twitter](https://x.com/tarkhovich)
 * [Medium](https://medium.com/@tarkhov)
-* [LinkedIn](https://www.linkedin.com/in/tarkhov/)
 
 ## License
 

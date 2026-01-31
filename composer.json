@@ -1,26 +1,24 @@
 {
-    "name": "tarkhov/eloquent-cache",
-    "description": "Laravel Eloquent model cache.",
-    "keywords": ["laravel", "model", "cache", "database", "sql", "orm", "eloquent"],
+    "name": "tarkhov/laravel-db-cache",
+    "description": "Laravel database cache.",
+    "keywords": ["laravel", "model", "cache", "database", "db", "sql", "orm", "eloquent", "query"],
     "type": "library",
-    "homepage": "https://github.com/tarkhov/eloquent-cache",
+    "homepage": "https://github.com/tarkhov/laravel-db-cache",
     "license": "MIT",
     "authors": [
         {
-            "name": "Alexander Tarkhov",
-            "email": "agtuks@gmail.com",
+            "name": "Tarkhov",
             "homepage": "https://github.com/tarkhov",
             "role": "Developer"
         }
     ],
     "support": {
-        "email": "agtuks@gmail.com",
-        "issues": "https://github.com/tarkhov/eloquent-cache/issues",
-        "source": "https://github.com/tarkhov/eloquent-cache"
+        "issues": "https://github.com/tarkhov/laravel-db-cache/issues",
+        "source": "https://github.com/tarkhov/laravel-db-cache"
     },
     "autoload": {
         "psr-4": {
-            "EloquentCache\\": "src/"
+            "LaravelDBCache\\": "src/"
         }
     },
     "require": {
