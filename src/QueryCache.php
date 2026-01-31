@@ -3,6 +3,7 @@ namespace LaravelDBCache;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Support\Facades\Cache;
 
 class QueryCache
 {
