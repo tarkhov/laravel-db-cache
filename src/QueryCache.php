@@ -3,7 +3,6 @@ namespace LaravelDBCache;
 
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Support\Facades\Cache;
 
 class QueryCache
 {
@@ -13,7 +12,9 @@ class QueryCache
         protected Builder | EloquentBuilder $builder,
         protected ?int $minutes = null,
         protected array $tags = []
-    ) {}
+    ) {
+        $this->key = CacheKey::make($builder);
+    }
 
     protected function get(): string
     {
@@ -33,39 +34,22 @@ class QueryCache
         }
     }
 
-    protected function delete(): void
+    public function delete(): void
     {
-        if ($this->key !== null) {
-            Cache::forget($this->key);
-        } 
-
         if (!empty($this->tags)) {
             Cache::tags($this->tags)->flush();
+        } elseif ($this->key !== null) {
+            Cache::forget($this->key);
         }
-    }
-
-    public function makeKey(): string
-    {
-        $query = $this->builder->getQuery();
-        $sql = str_replace('?', '%s', $query->toSql());
-        $bindings = array_map(function ($binding) {
-            return is_numeric($binding) ? $binding : "'" . $binding . "'";
-        }, $query->getBindings());
-        return sha1(vsprintf($sql, $bindings));
     }
 
     public function one(callable $callback): mixed
     {
-        if ($this->key === null) {
-            $this->key = $this->makeKey();
-        }
-
         $result = $this->get();
         if ($result) {
+            $result = json_decode($result);
             if ($this->builder instanceof EloquentBuilder) {
-                $result = $this->builder->getModel()->newFromBuilder(json_decode($result));
-            } else {
-                $result = json_decode($result);
+                $result = $this->builder->getModel()->newFromBuilder($result);
             }
         } else {
             $result = $callback($this->builder);
@@ -79,16 +63,11 @@ class QueryCache
 
     public function many(callable $callback): mixed
     {
-        if ($this->key === null) {
-            $this->key = $this->makeKey();
-        }
-
         $result = $this->get();
         if ($result) {
+            $result = (array) json_decode($result);
             if ($this->builder instanceof EloquentBuilder) {
-                $result = $this->builder->getModel()->hydrate((array) json_decode($result));
-            } else {
-                $result = (array) json_decode($result);
+                $result = $this->builder->getModel()->hydrate($result);
             }
         } else {
             $result = $callback($this->builder);
