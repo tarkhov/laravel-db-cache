@@ -34,7 +34,7 @@ composer require tarkhov/laravel-db-cache
 
 1. Import **QueryCache** class: `use LaravelDBCache\QueryCache`.
 2. Creating a query builder without retrieving data: `$builder = DB::table('users')->select(['id', 'name'])->where('id', $id);`.
-3. Get new **QueryCache** instance by passing query builder as argument in constructor: `$queryCache = new QueryCache($builder);`. Since each sql query is unique, the constructor will generate a caching key as a hash from the sql query, which guarantees the absence of collisions and duplicates..
+3. Get new **QueryCache** instance by passing query builder as argument in constructor: `$queryCache = new QueryCache($builder);`. Since each sql query is unique, the constructor will generate a caching key as a hash from the sql query, which guarantees the absence of collisions and duplicates.  Optionally, you can pass the amount of cache time in minutes as the 2nd argument and cache tags as the 3rd argument if you plan to use them instead of the cache key: `$queryCache = new QueryCache($builder, 60, ['my_tag']);`.
 4. Get cached data from storage or automatically saving the result in the cache if the given query has not yet been added to the cache storage using **one** method for single row query or **many** for multiple rows query with callback as argument, this callback has one argument - it's your query builder without any modifications: `$result = $queryCache->one(fn($builder) => $builder->first());` or `$result = $queryCache->many(fn($builder) => $builder->get());`. You can use any method for data retrieving like `first()`, `firstOrFail()`, `get()` and others, because it's a native non modified Laravel query builder.
 
 ### Using DB facade query
