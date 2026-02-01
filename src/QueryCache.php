@@ -17,7 +17,7 @@ class QueryCache
         $this->key = CacheKey::make($builder);
     }
 
-    protected function get(): string
+    protected function get(): ?string
     {
         if (!empty($this->tags)) {
             return Cache::tags($this->tags)->get($this->key);
