@@ -1,6 +1,6 @@
 # Laravel DB Cache
 
-Laravel database cache.
+Laravel database query caching.
 
 ### Contents
 
@@ -8,8 +8,9 @@ Laravel database cache.
 2. [Installation](#installation)
    1. [Composer](#composer)
 3. [Usage](#usage)
-   1. [Using DB facade query](#using-db-facade-query)
-   1. [Using Eloquent ORM query](#using-eloquent-orm-query)
+   1. [How it work](#how-it-work)
+   2. [Using DB facade query](#using-db-facade-query)
+   3. [Using Eloquent ORM query](#using-eloquent-orm-query)
 4. [Author](#author)
 5. [License](#license)
 
@@ -29,6 +30,13 @@ composer require tarkhov/laravel-db-cache
 
 ## Usage
 
+### How it work
+
+1. Import **QueryCache** class: `use LaravelDBCache\QueryCache`.
+2. Creating a query builder without retrieving data: `$builder = DB::table('users')->select(['id', 'name'])->where('id', $id);`.
+3. Get new **QueryCache** instance by passing query builder as argument in constructor: `$queryCache = new QueryCache($builder);`. Since each sql query is unique, the constructor will generate a caching key as a hash from the sql query, which guarantees the absence of collisions and duplicates..
+4. Get cached data from storage or automatically saving the result in the cache if the given query has not yet been added to the cache storage using **one** method for single row query or **many** for multiple rows query with callback as argument, this callback has one argument - it's your query builder without any modifications: `$result = $queryCache->one(fn($builder) => $builder->first());` or `$result = $queryCache->many(fn($builder) => $builder->get());`. You can use any method for data retrieving like `first()`, `firstOrFail()`, `get()` and others, because it's a native non modified Laravel query builder.
+
 ### Using DB facade query
 
 Retrieve one row.
@@ -44,7 +52,9 @@ class UserController extends Controller
 {
     public function oneWithDB(string $id): object
     {
+        // create builder query 
         $builder = DB::table('users')->select(['id', 'name'])->where('id', $id);
+        // retrieve cached result
         $user = (new QueryCache($builder))->one(fn($builder) => $builder->first());
         return $user;
     }
