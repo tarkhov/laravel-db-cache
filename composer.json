@@ -1,6 +1,6 @@
 {
     "name": "tarkhov/laravel-db-cache",
-    "description": "Laravel database cache.",
+    "description": "Laravel database query caching.",
     "keywords": ["laravel", "model", "cache", "database", "db", "sql", "orm", "eloquent", "query"],
     "type": "library",
     "homepage": "https://github.com/tarkhov/laravel-db-cache",
